@@ -33,6 +33,7 @@
 		</Compiler>
 		<Unit filename="../histogram.cpp" />
 		<Unit filename="../histogram.h" />
+		<Unit filename="../svg.cpp" />
 		<Unit filename="../test.cpp" />
 		<Extensions />
 	</Project>
