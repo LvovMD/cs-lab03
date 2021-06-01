@@ -8,13 +8,6 @@
 
 using namespace std;
 
-struct Input
-{
-    size_t number_count;
-    vector<double> numbers;
-    size_t bin_count;
-};
-
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -36,21 +29,21 @@ Input read_input(istream& in) {
     return data;
 }
 
-vector<size_t> make_histogram(vector<double> numbers, size_t number_count, size_t bin_count)
+vector<size_t> make_histogram(Input data)
 {
-    vector<size_t> bins(bin_count);
-    double min = numbers[0];
-    double max = numbers[0];
-    find_minmax(numbers, min, max);
-    double bin_size = (max - min) / bin_count;
-    for (size_t i = 0; i < number_count; i++)
+    vector<size_t> bins(data.bin_count);
+    double min = data.numbers[0];
+    double max = data.numbers[0];
+    find_minmax(data.numbers, min, max);
+    double bin_size = (max - min) / data.bin_count;
+    for (size_t i = 0; i < data.number_count; i++)
     {
         bool found = false;
-        for (size_t j = 0; (j < bin_count - 1) && !found; j++)
+        for (size_t j = 0; (j < data.bin_count - 1) && !found; j++)
         {
             auto lo = min + j * bin_size;
             auto hi = min + (j + 1) * bin_size;
-            if ((lo <= numbers[i]) && (numbers[i] < hi))
+            if ((lo <= data.numbers[i]) && (data.numbers[i] < hi))
             {
                 bins[j]++;
                 found = true;
@@ -58,7 +51,7 @@ vector<size_t> make_histogram(vector<double> numbers, size_t number_count, size_
         }
         if (!found)
         {
-            bins[bin_count - 1]++;
+            bins[data.bin_count - 1]++;
         }
     }
     return bins;
@@ -144,7 +137,7 @@ int main()
     cerr << "Enter separator dasharray: ";
     double dasharray;
     cin >> dasharray;
-    const auto bins = make_histogram(data.numbers, data.number_count, data.bin_count);
+    const auto bins = make_histogram(data);
     show_histogram_svg(bins, data.bin_count, bin_namings,dash,dasharray);
     return 0;
 }

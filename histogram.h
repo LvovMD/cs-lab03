@@ -9,6 +9,13 @@
 
 using namespace std;
 
+struct Input
+{
+    size_t number_count;
+    vector<double> numbers;
+    size_t bin_count;
+};
+
 void find_minmax(vector<double> numbers, double& min, double& max);
 void svg_begin(double width, double height);
 void svg_end();
