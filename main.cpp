@@ -67,6 +67,8 @@ Input download(const string& address)
             curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
             res = curl_easy_perform(curl);
             if (res != 0)cout<<curl_easy_strerror(res);
+            long req;
+            cerr<<"Request size: "<<curl_easy_getinfo(curl, CURLINFO_REQUEST_SIZE, &req);
             curl_easy_cleanup(curl);
         }
     return read_input(buffer, false);
