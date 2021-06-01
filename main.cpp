@@ -8,6 +8,13 @@
 
 using namespace std;
 
+struct Input
+{
+    size_t number_count;
+    vector<double> numbers;
+    size_t bin_count;
+};
+
 vector<double> input_numbers(istream& in, size_t count)
 {
     vector<double> result(count);
@@ -16,6 +23,17 @@ vector<double> input_numbers(istream& in, size_t count)
         in >> result[i];
     }
     return result;
+}
+
+Input read_input(istream& in) {
+    Input data;
+    cerr << "Enter number count: ";
+    in >> data.number_count;
+    cerr << "Enter numbers: ";
+    data.numbers = input_numbers(in, data.number_count);
+    cerr << "Enter bin count: ";
+    cin >> data.bin_count;
+    return data;
 }
 
 vector<size_t> make_histogram(vector<double> numbers, size_t number_count, size_t bin_count)
@@ -102,23 +120,17 @@ int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    size_t number_count;
-    cerr << "Enter number count: ";
-    cin >> number_count;
-    const auto numbers = input_numbers(cin, number_count);
-    size_t bin_count;
-    cerr << "Enter bin count: ";
-    cin >> bin_count;
+    Input data = read_input(cin);
     cin.get();
     vector<char>naming(80);
-    vector<vector<char>> bin_namings(bin_count,naming);
-    vector<char[80]> bin_naming_list(bin_count);
-    for (size_t i = 0; i < bin_count; i++)
+    vector<vector<char>> bin_namings(data.bin_count,naming);
+    vector<char[80]> bin_naming_list(data.bin_count);
+    for (size_t i = 0; i < data.bin_count; i++)
     {
         cerr << "Enter bin " << i + 1 << " naming: ";
         cin.getline(bin_naming_list[i], 80);
     }
-    for (size_t iter = 0; iter < bin_count; iter++)
+    for (size_t iter = 0; iter < data.bin_count; iter++)
     {
         for (size_t i = 0; i <= strlen(bin_naming_list[iter]); i++)
         {
@@ -132,7 +144,7 @@ int main()
     cerr << "Enter separator dasharray: ";
     double dasharray;
     cin >> dasharray;
-    const auto bins = make_histogram(numbers, number_count, bin_count);
-    show_histogram_svg(bins, bin_count, bin_namings,dash,dasharray);
+    const auto bins = make_histogram(data.numbers, data.number_count, data.bin_count);
+    show_histogram_svg(bins, data.bin_count, bin_namings,dash,dasharray);
     return 0;
 }
