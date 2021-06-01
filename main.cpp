@@ -4,6 +4,8 @@
 #include <vector>
 #include <Windows.h>
 #include <iterator>
+#include <sstream>
+#include <string>
 #include "histogram.h"
 #include <curl/curl.h>
 
@@ -29,6 +31,33 @@ Input read_input(istream& in, bool prompt)
     if (prompt) cerr << "Enter bin count: ";
     in >> data.bin_count;
     return data;
+}
+
+size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
+{
+    size_t data_size = item_size * item_count;
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+    char* item_list = reinterpret_cast<char*>(items);
+    buffer->write(item_list, data_size);
+    return data_size;
+}
+
+Input download(const string& address)
+{
+    stringstream buffer;
+    CURL *curl = curl_easy_init();
+        if(curl)
+        {
+            CURLcode res;
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
+            curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
+            res = curl_easy_perform(curl);
+            if (res != 0)cout<<curl_easy_strerror(res);
+            curl_easy_cleanup(curl);
+        }
+    return read_input(buffer, false);
 }
 
 vector<size_t> make_histogram(Input data)
@@ -116,23 +145,15 @@ int main(int argc, char* argv[])
     curl_global_init(CURL_GLOBAL_ALL);
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
+    Input data;
     if (argc>1)
     {
-        CURL *curl = curl_easy_init();
-        if(curl)
-        {
-            CURLcode res;
-            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
-            res = curl_easy_perform(curl);
-            if (res != 0)cout<<curl_easy_strerror(res);
-            curl_easy_cleanup(curl);
-        }
-        return 0;
+    data = download(argv[1]);
     }
     else
     {
-    Input data = read_input(cin,true);
+    data = read_input(cin,true);
+    }
     cin.get();
     vector<char>naming(80);
     vector<vector<char>> bin_namings(data.bin_count,naming);
@@ -159,5 +180,4 @@ int main(int argc, char* argv[])
     const auto bins = make_histogram(data);
     show_histogram_svg(bins, data.bin_count, bin_namings,dash,dasharray);
     return 0;
-    }
 }
