@@ -4,6 +4,7 @@
 #include <vector>
 #include <Windows.h>
 #include <iterator>
+#include <sstream>
 #include "histogram.h"
 
 using namespace std;
@@ -42,8 +43,21 @@ string svg_line(double x1, float y1, double x2, float y2, string stroke, float s
 string make_info_text()
 {
 //    stringstream buffer;
-//    // TODO: получить версию системы, записать в буфер.
+//    auto info = GetVersion();
+//    DWORD mask = 0x0000ffff;
+//    DWORD version = info & mask;
+//    DWORD platform = info >> 16;
+//    DWORD maj_mask = 0x000000ff;
+//    DWORD major = info & maj_mask;
+//    DWORD minor = (info >> 8) & maj_mask;
+//    if ((info & 0x8000000) == 0)
+//    {
+//        DWORD build = platform;
+//        sprintf(buffer,"Windows %u.%u (build %u)",major,minor,build);
+//    }
 //    // TODO: получить имя компьютера, записать в буфер.
+//    TCHAR  infoBuf[INFO_BUFFER_SIZE];
+//    DWORD  bufCharCount = INFO_BUFFER_SIZE;
 //    return buffer.str();
 }
 

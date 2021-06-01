@@ -110,8 +110,12 @@ int main()
     if ((info & 0x8000000) == 0)
     {
         DWORD build = platform;
-        printf("Windows %u.%u (build %u)",major,minor,build);
+        printf("Windows %u.%u (build %u) \n",major,minor,build);
     }
+    TCHAR  infoBuf[MAX_COMPUTERNAME_LENGTH];
+    DWORD  bufCharCount = MAX_COMPUTERNAME_LENGTH + 1;
+    GetComputerName(infoBuf,&bufCharCount);
+    printf("Computer name: %s",infoBuf);
     return 0;
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
