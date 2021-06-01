@@ -4,6 +4,7 @@
 #include <vector>
 #include <Windows.h>
 #include <iterator>
+#include <sstream>
 #include "histogram.h"
 
 using namespace std;
@@ -39,14 +40,36 @@ string svg_line(double x1, float y1, double x2, float y2, string stroke, float s
     +"' stroke-dasharray = '"+to_string(stroke_dash)+" "+to_string(stroke_dasharray)+"'/>";
 }
 
+string make_info_text()
+{
+    stringstream buffer;
+    auto info = GetVersion();
+    DWORD mask = 0x0000ffff;
+    DWORD version = info & mask;
+    DWORD platform = info >> 16;
+    DWORD maj_mask = 0x000000ff;
+    DWORD major = info & maj_mask;
+    DWORD minor = (info >> 8) & maj_mask;
+    if ((info & 0x8000000) == 0)
+    {
+        DWORD build = platform;
+        buffer<<"Windows "<<major<<"."<<minor<<" (build "<<build<<")"<<endl;
+    }
+    TCHAR  infoBuf[MAX_COMPUTERNAME_LENGTH];
+    DWORD  bufCharCount = MAX_COMPUTERNAME_LENGTH + 1;
+    GetComputerName(infoBuf,&bufCharCount);
+    buffer<<"Computer name: "<<infoBuf;
+    return buffer.str();
+}
+
 void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<string> bin_namings,double dash, double dasharray)
 {
 
-    const auto IMAGE_WIDTH = 400;
+    const auto IMAGE_WIDTH = 500;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
     const auto TEXT_BASELINE = 20;
-    const auto TEXT_WIDTH = 50;
+    const auto TEXT_WIDTH = 10;
     const auto BIN_HEIGHT = 30;
     const auto LINE_HEIGHT = 5.0;
     double BLOCK_WIDTH = 10;
@@ -84,5 +107,6 @@ void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<string> bi
         }
         cout << endl;
     }
+    svg_text(TEXT_LEFT, (bin_count+1)*(BIN_HEIGHT+LINE_HEIGHT) + TEXT_BASELINE, make_info_text());
     svg_end();
 }
