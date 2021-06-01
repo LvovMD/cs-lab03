@@ -103,18 +103,14 @@ int main()
     auto info = GetVersion();
     DWORD mask = 0x0000ffff;
     DWORD version = info & mask;
-    printf("%u %x \n",version,version);
     DWORD platform = info >> 16;
-    DWORD min_mask = 0x0000ff00;
-    DWORD minor = info & min_mask;
-    printf("%u %x \n",minor,minor);
     DWORD maj_mask = 0x000000ff;
     DWORD major = info & maj_mask;
-    printf("%u %x \n",major,major);
+    DWORD minor = (info >> 8) & maj_mask;
     if ((info & 0x8000000) == 0)
     {
         DWORD build = platform;
-        printf("%u %x \n",platform,platform);
+        printf("Windows %u.%u (build %u)",major,minor,build);
     }
     return 0;
     SetConsoleCP(1251);
