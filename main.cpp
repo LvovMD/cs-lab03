@@ -100,6 +100,23 @@ void show_histogramm_text(vector<size_t> bins, size_t bin_count, vector<vector<c
 
 int main()
 {
+    auto info = GetVersion();
+    DWORD mask = 0x0000ffff;
+    DWORD version = info & mask;
+    printf("%u %x \n",version,version);
+    DWORD platform = info >> 16;
+    DWORD min_mask = 0x0000ff00;
+    DWORD minor = info & min_mask;
+    printf("%u %x \n",minor,minor);
+    DWORD maj_mask = 0x000000ff;
+    DWORD major = info & maj_mask;
+    printf("%u %x \n",major,major);
+    if ((info & 0x8000000) == 0)
+    {
+        DWORD build = platform;
+        printf("%u %x \n",platform,platform);
+    }
+    return 0;
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     size_t number_count;

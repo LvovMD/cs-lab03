@@ -41,10 +41,10 @@ string svg_line(double x1, float y1, double x2, float y2, string stroke, float s
 
 string make_info_text()
 {
-    stringstream buffer;
-    // TODO: получить версию системы, записать в буфер.
-    // TODO: получить имя компьютера, записать в буфер.
-    return buffer.str();
+//    stringstream buffer;
+//    // TODO: получить версию системы, записать в буфер.
+//    // TODO: получить имя компьютера, записать в буфер.
+//    return buffer.str();
 }
 
 void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<char>> bin_naming_list,double dash, double dasharray)
