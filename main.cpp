@@ -100,23 +100,6 @@ void show_histogramm_text(vector<size_t> bins, size_t bin_count, vector<vector<c
 
 int main()
 {
-    auto info = GetVersion();
-    DWORD mask = 0x0000ffff;
-    DWORD version = info & mask;
-    DWORD platform = info >> 16;
-    DWORD maj_mask = 0x000000ff;
-    DWORD major = info & maj_mask;
-    DWORD minor = (info >> 8) & maj_mask;
-    if ((info & 0x8000000) == 0)
-    {
-        DWORD build = platform;
-        printf("Windows %u.%u (build %u) \n",major,minor,build);
-    }
-    TCHAR  infoBuf[MAX_COMPUTERNAME_LENGTH];
-    DWORD  bufCharCount = MAX_COMPUTERNAME_LENGTH + 1;
-    GetComputerName(infoBuf,&bufCharCount);
-    printf("Computer name: %s",infoBuf);
-    return 0;
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     size_t number_count;
