@@ -100,10 +100,6 @@ void show_histogramm_text(vector<size_t> bins, size_t bin_count, vector<vector<c
 
 int main()
 {
-    const char* name = "Commander Shepard";
-    int year = 2000;
-    printf("%s was born in %x.\n", name, year);
-    return(0);
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     size_t number_count;
