@@ -125,7 +125,7 @@ void svg_line(double x1, float y1, double x2, float y2, string stroke, float str
     cout << "<line x1='"<<x1<<"' y1='"<<y1<<"' x2='"<<x2<<"' y2='"<<y2<<"' stroke='"<<stroke<<"' stroke-width='"<<stroke_width<<"' stroke-dasharray = '"<<stroke_dash<<" "<<stroke_dasharray<<"'/>";
 }
 
-void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<char>> bin_naming_list)
+void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<char>> bin_naming_list,double dash, double dasharray)
 {
 
     const auto IMAGE_WIDTH = 400;
@@ -134,6 +134,7 @@ void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<cha
     const auto TEXT_BASELINE = 20;
     const auto TEXT_WIDTH = 50;
     const auto BIN_HEIGHT = 30;
+    const auto LINE_HEIGHT = 5.0;
     double BLOCK_WIDTH = 10;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     vector<char[80]> bin_namings(bin_count);
@@ -167,10 +168,14 @@ void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<cha
     }
     for (size_t i = 0; i < bin_count; i++)
     {
-        svg_text(TEXT_LEFT, i*(BIN_HEIGHT) + TEXT_BASELINE, bin_namings[i]);
+        svg_text(TEXT_LEFT, i*(BIN_HEIGHT+LINE_HEIGHT) + TEXT_BASELINE, bin_namings[i]);
         for (size_t j = 0; j < (bins[i]); j++)
         {
-            svg_rect(TEXT_LEFT+TEXT_WIDTH*strlen(bin_namings[i])+(BLOCK_WIDTH*(j-1)), i*(BIN_HEIGHT), BLOCK_WIDTH, BIN_HEIGHT,"red","white");
+            svg_rect(TEXT_LEFT+TEXT_WIDTH*strlen(bin_namings[i])+(BLOCK_WIDTH*(j-1)), i*(BIN_HEIGHT+LINE_HEIGHT), BLOCK_WIDTH, BIN_HEIGHT,"red","white");
+        }
+        if (i>0)
+        {
+            svg_line(0,i*(BIN_HEIGHT)+(i-1)*LINE_HEIGHT+LINE_HEIGHT/2,IMAGE_WIDTH,i*(BIN_HEIGHT)+(i-1)*LINE_HEIGHT+LINE_HEIGHT/2,"black",LINE_HEIGHT,dash,dasharray);
         }
         cout << endl;
     }
@@ -205,7 +210,13 @@ int main()
             bin_namings[iter].push_back(name[i]);
         }
     }
+    cerr << "Enter separator dash: ";
+    double dash;
+    cin >>  dash;
+    cerr << "Enter separator dasharray: ";
+    double dasharray;
+    cin >> dasharray;
     const auto bins = make_histogram(numbers, number_count, bin_count);
-    show_histogram_svg(bins, bin_count, bin_namings);
+    show_histogram_svg(bins, bin_count, bin_namings,dash,dasharray);
     return 0;
 }
