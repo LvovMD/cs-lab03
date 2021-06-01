@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <iterator>
 #include "histogram.h"
+#include <curl/curl.h>
 
 using namespace std;
 
@@ -110,10 +111,26 @@ void show_histogramm_text(vector<size_t> bins, size_t bin_count, vector<vector<c
 
 
 
-int main()
+int main(int argc, char* argv[])
 {
+    curl_global_init(CURL_GLOBAL_ALL);
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
+    if (argc>1)
+    {
+        CURL *curl = curl_easy_init();
+        if(curl)
+        {
+            CURLcode res;
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
+            res = curl_easy_perform(curl);
+            curl_easy_cleanup(curl);
+        }
+        return 0;
+    }
+    else
+    {
     Input data = read_input(cin,true);
     cin.get();
     vector<char>naming(80);
@@ -141,4 +158,5 @@ int main()
     const auto bins = make_histogram(data);
     show_histogram_svg(bins, data.bin_count, bin_namings,dash,dasharray);
     return 0;
+    }
 }

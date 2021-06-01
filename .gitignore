@@ -3,3 +3,4 @@
 *.layout
 /lab03-test/bin
 /lab03-test/obj
+/curl
