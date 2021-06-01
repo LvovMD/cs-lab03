@@ -31,7 +31,7 @@ Input read_input(istream& in, bool prompt)
     in >> data.bin_count;
     string str;
     in.get();
-    in.get();
+//    in.get();
     for (size_t i = 0; i < data.bin_count; i++)
     {
         if (prompt) cerr << "Enter bin " << i + 1 << " naming: ";
@@ -68,7 +68,8 @@ Input download(const string& address)
             res = curl_easy_perform(curl);
             if (res != 0)cout<<curl_easy_strerror(res);
             long req;
-            cerr<<"Request size: "<<curl_easy_getinfo(curl, CURLINFO_REQUEST_SIZE, &req);
+            curl_easy_getinfo(curl, CURLINFO_REQUEST_SIZE, &req);
+            cerr<<"Request size: "<< req;
             curl_easy_cleanup(curl);
         }
     return read_input(buffer, false);
