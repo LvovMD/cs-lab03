@@ -35,6 +35,7 @@
 		<Unit filename="histogram.cpp" />
 		<Unit filename="histogram.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="svg.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
