@@ -8,24 +8,25 @@
 
 using namespace std;
 
-vector<double> input_numbers(istream& in, size_t count)
+vector<double> input_numbers(istream& in, size_t count,bool prompt)
 {
     vector<double> result(count);
     for (size_t i = 0; i < count; i++) {
-        cerr << "Enter number " << i + 1 << ": ";
+        if (prompt) cerr << "Enter number " << i + 1 << ": ";
         in >> result[i];
     }
     return result;
 }
 
-Input read_input(istream& in) {
+Input read_input(istream& in, bool prompt)
+{
     Input data;
-    cerr << "Enter number count: ";
+    if (prompt) cerr << "Enter number count: ";
     in >> data.number_count;
-    cerr << "Enter numbers: ";
-    data.numbers = input_numbers(in, data.number_count);
-    cerr << "Enter bin count: ";
-    cin >> data.bin_count;
+    if (prompt) cerr << "Enter numbers: ";
+    data.numbers = input_numbers(in, data.number_count,prompt);
+    if (prompt) cerr << "Enter bin count: ";
+    in >> data.bin_count;
     return data;
 }
 
@@ -113,7 +114,7 @@ int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    Input data = read_input(cin);
+    Input data = read_input(cin,true);
     cin.get();
     vector<char>naming(80);
     vector<vector<char>> bin_namings(data.bin_count,naming);
