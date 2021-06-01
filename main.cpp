@@ -26,10 +26,22 @@ Input read_input(istream& in, bool prompt)
     Input data;
     if (prompt) cerr << "Enter number count: ";
     in >> data.number_count;
-    if (prompt) cerr << "Enter numbers: ";
     data.numbers = input_numbers(in, data.number_count,prompt);
     if (prompt) cerr << "Enter bin count: ";
     in >> data.bin_count;
+    string str;
+    in.get();
+    in.get();
+    for (size_t i = 0; i < data.bin_count; i++)
+    {
+        if (prompt) cerr << "Enter bin " << i + 1 << " naming: ";
+        getline(in,str);
+        data.bin_namings.push_back(str);
+    }
+    if (prompt) cerr << "Enter separator dash: ";
+    in >> data.dash;
+    if (prompt) cerr << "Enter separator dasharray: ";
+    in >> data.dasharray;
     return data;
 }
 
@@ -154,30 +166,7 @@ int main(int argc, char* argv[])
     {
     data = read_input(cin,true);
     }
-    cin.get();
-    vector<char>naming(80);
-    vector<vector<char>> bin_namings(data.bin_count,naming);
-    vector<char[80]> bin_naming_list(data.bin_count);
-    for (size_t i = 0; i < data.bin_count; i++)
-    {
-        cerr << "Enter bin " << i + 1 << " naming: ";
-        cin.getline(bin_naming_list[i], 80);
-    }
-    for (size_t iter = 0; iter < data.bin_count; iter++)
-    {
-        for (size_t i = 0; i <= strlen(bin_naming_list[iter]); i++)
-        {
-            char* name = bin_naming_list[iter];
-            bin_namings[iter].push_back(name[i]);
-        }
-    }
-    cerr << "Enter separator dash: ";
-    double dash;
-    cin >>  dash;
-    cerr << "Enter separator dasharray: ";
-    double dasharray;
-    cin >> dasharray;
     const auto bins = make_histogram(data);
-    show_histogram_svg(bins, data.bin_count, bin_namings,dash,dasharray);
+    show_histogram_svg(bins, data.bin_count, data.bin_namings,data.dash,data.dasharray);
     return 0;
 }

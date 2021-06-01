@@ -25,11 +25,11 @@ void svg_end()
 
 void svg_text(double left, double baseline, string text)
 {
-    cout << "<text x='"<<left<<"' y='"<<baseline<<"'>"<<text<<"</text>";
+    cout << "<text x='"<<left<<"' y='"<<baseline<<"'>"<<text<<"</text>"<<endl;
 }
 void svg_rect(double x, double y, double width, double height, string stroke, string fill)
 {
-    cout << "<rect x='"<<x<<"' y='"<<y<<"' width='"<<width<<"' height='"<<height<<"' stroke='"<<stroke<<"' fill='"<<fill<<"' />";
+    cout << "<rect x='"<<x<<"' y='"<<y<<"' width='"<<width<<"' height='"<<height<<"' stroke='"<<stroke<<"' fill='"<<fill<<"' />"<<endl;
 }
 
 string svg_line(double x1, float y1, double x2, float y2, string stroke, float stroke_width, double stroke_dash, double stroke_dasharray)
@@ -39,7 +39,7 @@ string svg_line(double x1, float y1, double x2, float y2, string stroke, float s
     +"' stroke-dasharray = '"+to_string(stroke_dash)+" "+to_string(stroke_dasharray)+"'/>";
 }
 
-void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<char>> bin_naming_list,double dash, double dasharray)
+void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<string> bin_namings,double dash, double dasharray)
 {
 
     const auto IMAGE_WIDTH = 400;
@@ -51,21 +51,12 @@ void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<cha
     const auto LINE_HEIGHT = 5.0;
     double BLOCK_WIDTH = 10;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
-    vector<char[80]> bin_namings(bin_count);
-    size_t iter = 0;
-    for (size_t iter = 0; iter < bin_count; iter++)
-    {
-        for (char l : bin_naming_list[iter])
-        {
-            bin_namings[iter][strlen(bin_namings[iter])] = l;
-        }
-    }
-    double max_len = strlen(bin_namings[0]);
+    double max_len = bin_namings[0].length();
     for (size_t i = 0; i < bin_count; i++)
     {
-        if (strlen(bin_namings[i]) > max_len)
+        if (bin_namings[i].length() > max_len)
         {
-            max_len = strlen(bin_namings[i]);
+            max_len = bin_namings[i].length();
         }
     }
     double max_count = bins[0];
@@ -85,11 +76,11 @@ void show_histogram_svg(vector<size_t> bins, size_t bin_count, vector<vector<cha
         svg_text(TEXT_LEFT, i*(BIN_HEIGHT+LINE_HEIGHT) + TEXT_BASELINE, bin_namings[i]);
         for (size_t j = 0; j < (bins[i]); j++)
         {
-            svg_rect(TEXT_LEFT+TEXT_WIDTH*strlen(bin_namings[i])+(BLOCK_WIDTH*(j-1)), i*(BIN_HEIGHT+LINE_HEIGHT), BLOCK_WIDTH, BIN_HEIGHT,"red","white");
+            svg_rect(TEXT_LEFT+TEXT_WIDTH*(bin_namings[i].length())+(BLOCK_WIDTH*(j-1)), i*(BIN_HEIGHT+LINE_HEIGHT), BLOCK_WIDTH, BIN_HEIGHT,"red","white");
         }
         if (i>0)
         {
-            cout << svg_line(0,i*(BIN_HEIGHT)+(i-1)*LINE_HEIGHT+LINE_HEIGHT/2,IMAGE_WIDTH,i*(BIN_HEIGHT)+(i-1)*LINE_HEIGHT+LINE_HEIGHT/2,"black",LINE_HEIGHT,dash,dasharray);
+            cout << svg_line(0,i*(BIN_HEIGHT)+(i-1)*LINE_HEIGHT+LINE_HEIGHT/2,IMAGE_WIDTH,i*(BIN_HEIGHT)+(i-1)*LINE_HEIGHT+LINE_HEIGHT/2,"black",LINE_HEIGHT,dash,dasharray)<<endl;
         }
         cout << endl;
     }
